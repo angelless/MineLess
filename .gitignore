@@ -1,12 +1,11 @@
-*.class
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
-*.jar
-*.war
-*.ear
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+.classpath
+.project
+.settings/org.eclipse.core.resources.prefs
+.settings/org.eclipse.jdt.core.prefs
+.settings/org.eclipse.m2e.core.prefs
+target/classes/mineless/DataBase$1.class
+target/classes/mineless/DataBase$2.class
+target/classes/mineless/DataBase$3.class
+target/classes/mineless/DataBase.class
+target/classes/mineless/Main.class
+target/classes/mineless/Manage.class

@@ -42,4 +42,8 @@ public class Main extends PluginBase implements Listener {
 				getServer().getLevelByName(str[3]));
 	}
 
+	@EventHandler
+	public void onBreak(BlockBreakEvent event) {
+		return;
+	} 
 }
