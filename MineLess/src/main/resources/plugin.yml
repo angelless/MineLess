@@ -1,0 +1,5 @@
+name: MineLess
+author: nexusA
+main : mineless.Main
+version: 0.0.1
+api: [1.0.0]

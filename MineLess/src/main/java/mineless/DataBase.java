@@ -18,6 +18,7 @@ import cn.nukkit.utils.Config;
 import cn.nukkit.utils.ConfigSection;
 
 public class DataBase {
+	private static Main plugin;
 
 	private static DataBase instance = null;
 	private static LinkedHashMap<Block, Integer> mine = new LinkedHashMap<>();
@@ -62,9 +63,10 @@ public class DataBase {
 
 		DataBase.mines = positions.getList("MINE");
 		DataBase.nethers = positions.getList("NETHER");
+		DataBase.plugin = plugin;
 	}
 
-	public Block mineing(Position pos) {
+	public static Block mineing(Position pos) {
 		if (mines.contains(toString(pos))) {
 			int ran = new Random().nextInt(1000);
 			for (Block b : mine.keySet()) {
@@ -96,6 +98,7 @@ public class DataBase {
 		DataBase.nethers.add(toString(pos));
 		return;
 	}
+
 
 	private LinkedHashMap<Block, Integer> toMine(Map<String, Object> m) {
 		LinkedHashMap<Block, Integer> map = new LinkedHashMap<>();
@@ -200,4 +203,23 @@ public class DataBase {
 		return "§c§l[알림] §r§7" + message;
 	}
 
+	public static void save(){
+		LinkedHashMap<String, Object> map1 = new LinkedHashMap<>();
+		for(Block block : DataBase.mine.keySet()){
+		map1.put(toString(block), mine.get(block));
+		}
+		Config config = new Config(new File(plugin.getDataFolder(),"mine.json"),Config.JSON);
+		config.set("MINE", map1);
+		
+		for(Block block1 : DataBase.nether.keySet()){
+			map1.clear();
+			map1.put(toString(block1), nether.get(block1));
+		}
+		config.set("NETHER", map1);
+		config.save();
+		Config config1 = new Config(new File(plugin.getDataFolder(),"positions.json"),Config.JSON);
+		config1.set("MINE", mines);
+		config1.set("NETHER", nethers);
+		config1.save();
+	}
 }
