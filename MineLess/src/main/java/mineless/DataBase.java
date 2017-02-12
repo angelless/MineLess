@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
 
+import cn.nukkit.Server;
 import cn.nukkit.block.Block;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Position;
@@ -177,13 +178,18 @@ public class DataBase {
 
 	}
 
-	public static Position toPosition(String str) {
-		return new Position();
+	public static String toString(Position pos) {
+		StringBuilder str = new StringBuilder();
+		str.append(pos.getFloorX()).append(":").append(pos.getFloorY()).append(":").append(pos.getFloorZ()).append(":")
+				.append(pos.getLevel().getFolderName());
+		return str.toString();
+
 	}
 
-	public static String toString(Position pos) {
-		return "";
-
+	public static Position toPosition(String s) {
+		String[] str = s.split(":");
+		return new Position(Integer.parseInt(str[0]), Integer.parseInt(str[1]), Integer.parseInt(str[2]),
+				Server.getInstance().getLevelByName(str[3]));
 	}
 
 	public static String message(String message) {
