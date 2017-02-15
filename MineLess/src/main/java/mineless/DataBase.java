@@ -211,6 +211,15 @@ public class DataBase {
 		return "&l&6[알림]&r&7 " + message;
 	}
 
+	public static String lengthString(int length, String string) {
+		StringBuilder str = new StringBuilder(length);
+		for (int i = 0; i < length; i++) {
+			str.append(" ");
+		}
+		str.replace(0, string.length(), string);
+		return str.toString();
+	}
+
 	public boolean isMine(Position pos) {
 		String str = toString(pos);
 		return mines.contains(str);
