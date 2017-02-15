@@ -194,12 +194,16 @@ public class DataBase {
 				Server.getInstance().getLevelByName(str[3]));
 	}
 
-	public String message(String message) {
+	public static String message(String message) {
 		return "§a§l[알림] §r§7" + message;
 	}
 
-	public String alert(String message) {
+	public static String alert(String message) {
 		return "§c§l[알림] §r§7" + message;
+	}
+
+	public static String command(String message) {
+		return "&l&6[알림]&r&7 " + message;
 	}
 
 	public boolean isMine(Position pos) {

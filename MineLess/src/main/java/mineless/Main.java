@@ -9,7 +9,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import cn.nukkit.Player;
 import cn.nukkit.block.Block;
+import cn.nukkit.command.Command;
+import cn.nukkit.command.CommandMap;
+import cn.nukkit.command.CommandSender;
+import cn.nukkit.command.PluginCommand;
+import cn.nukkit.command.SimpleCommandMap;
+import cn.nukkit.command.data.CommandParameter;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
@@ -23,35 +30,26 @@ import cn.nukkit.network.protocol.UpdateBlockPacket;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.ConfigSection;
+import mineless.commnads.addMineCommand;
 import task.BlockPlaceTask;
 
 public class Main extends PluginBase implements Listener {
 	DataBase db = null;
+	static List<Player> Minner = new ArrayList<>();
+	static List<Player> Deller = new ArrayList<>();
 
 	@Override
 	public void onEnable() {
 		this.getServer().getPluginManager().registerEvents(this, this);
 		db = new DataBase(this);
 		this.getLogger().info(db.message("플러그인이 정상적으로 실행되었습니다"));
+		this.register(new addMineCommand(this));
+
 	}
 
 	@Override
 	public void onDisable() {
 		db.save();
-	}
-
-	public String toString(Position pos) {
-		StringBuilder str = new StringBuilder();
-		str.append(pos.getFloorX()).append(":").append(pos.getFloorY()).append(":").append(pos.getFloorZ()).append(":")
-				.append(pos.getLevel().getFolderName());
-		return str.toString();
-
-	}
-
-	public Position toPosition(String s) {
-		String[] str = s.split(":");
-		return new Position(Integer.parseInt(str[0]), Integer.parseInt(str[1]), Integer.parseInt(str[2]),
-				getServer().getLevelByName(str[3]));
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -61,25 +59,7 @@ public class Main extends PluginBase implements Listener {
 			Block block = db.mineing(event.getBlock());
 			block.setLevel(event.getBlock().getLevel());
 			block.position(event.getBlock());
-			//event.getPlayer().sendMessage(block.getId() + "");
-			/*
-			 * block.setLevel(event.getBlock().getLevel());
-			 * block.position(event.getBlock()); UpdateBlockPacket pk = new
-			 * UpdateBlockPacket(); pk.blockId = block.getId(); pk.blockData =
-			 * block.getDamage(); pk.x = block.getFloorX(); pk.y =
-			 * block.getFloorY(); pk.x = block.getFloorZ(); pk.flags =
-			 * UpdateBlockPacket.FLAG_NONE;
-			 * event.getPlayer().directDataPacket(pk);
-			 * 
-			 * event.getBlock().getLevel().setBlock(event.getBlock(), block,
-			 * true, true);
-			 * 
-			 * BlockPlaceEvent ev = new BlockPlaceEvent(event.getPlayer(),
-			 * block, block, block, new Item(1));
-			 * this.getServer().getPluginManager().callEvent(ev);
-			 * 
-			 * event.getBlock().getLevel().setBlock(event.getBlock(), block);
-			 */
+
 			this.getServer().getScheduler().scheduleDelayedTask(
 					new BlockPlaceTask(this, Block.get(block.getId(), block.getDamage(), block)), 5);
 		}
@@ -92,5 +72,70 @@ public class Main extends PluginBase implements Listener {
 			event.getPlayer().sendMessage(db.message(db.toString((Position) event.getBlock()) + "위치에 광산이 만들어졌습니다"));
 
 		}
+	}
+
+	@EventHandler
+	public void addMine(PlayerInteractEvent event) {
+	}
+
+	public static boolean isMinner(CommandSender player) {
+		if (player.isPlayer()) {
+			Main.Minner.contains((Player) player);
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean isDeller(CommandSender player) {
+		if (player.isPlayer()) {
+			Main.Deller.contains((Player) player);
+			return true;
+		}
+		return false;
+	}
+
+	public static void addMinner(CommandSender player) {
+		if (player.isPlayer()) {
+			Main.Minner.add((Player) player);
+		}
+		return;
+	}
+
+	public static void addDeller(CommandSender player) {
+		if (player.isPlayer()) {
+			Main.Deller.add((Player) player);
+		}
+		return;
+	}
+
+	public static void delDeller(CommandSender player) {
+		if (player.isPlayer()) {
+			Main.Deller.remove((Player) player);
+		}
+		return;
+	}
+
+	public static void delMinner(CommandSender player) {
+		if (player.isPlayer()) {
+			Main.Minner.remove(player);
+		}
+		return;
+	}
+
+	public void registerCommand(String name, String using, String descption, String permission,
+			Map<String, CommandParameter[]> parameter) {
+		SimpleCommandMap map = this.getServer().getCommandMap();
+		PluginCommand<Main> command = new PluginCommand<Main>(name, this);
+		command.setDescription(descption);
+		command.setUsage(using);
+		command.setCommandParameters(parameter);
+		command.setPermission(permission);
+		command.register(map);
+	}
+
+	public void register(Command command) {
+		SimpleCommandMap map = this.getServer().getCommandMap();
+
+		map.register("광산", command);
 	}
 }
