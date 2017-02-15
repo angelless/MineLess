@@ -208,7 +208,7 @@ public class DataBase {
 	}
 
 	public static String command(String message) {
-		return "&l&6[알림]&r&7 " + message;
+		return "§l§6[알림]§r§7 " + message;
 	}
 
 	public static String lengthString(int length, String string) {
