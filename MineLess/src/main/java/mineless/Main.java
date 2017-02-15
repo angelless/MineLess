@@ -66,16 +66,21 @@ public class Main extends PluginBase implements Listener {
 	}
 
 	@EventHandler
-	public void onClick(PlayerInteractEvent event) {
-		if (event.getItem().getId() == Item.STICK) {
+	public void addMine(PlayerInteractEvent event) {
+		if (Main.Minner.contains(event.getPlayer())) {
 			db.addMine(event.getBlock());
 			event.getPlayer().sendMessage(db.message(db.toString((Position) event.getBlock()) + "위치에 광산이 만들어졌습니다"));
-
 		}
 	}
 
 	@EventHandler
-	public void addMine(PlayerInteractEvent event) {
+	public void addDeller(PlayerInteractEvent event) {
+		if (Main.Deller.contains(event.getPlayer())) {
+			db.delMine(event.getBlock());
+			if (db.isMine(event.getBlock())) {
+				event.getPlayer().sendMessage(db.alert(db.toString((Position) event.getBlock()) + "위치에 광산이 삭제되었습니다"));
+			}
+		}
 	}
 
 	public static boolean isMinner(CommandSender player) {

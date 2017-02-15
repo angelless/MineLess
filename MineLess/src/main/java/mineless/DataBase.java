@@ -99,6 +99,11 @@ public class DataBase {
 		return;
 	}
 
+	public void delMine(Position pos) {
+		mines.remove(toString((Position) pos));
+		return;
+	}
+
 	private LinkedHashMap<String, Integer> toMine(Map<String, Object> m) {
 		LinkedHashMap<String, Integer> map = new LinkedHashMap<>();
 		ArrayList<String> slist = new ArrayList<>();
