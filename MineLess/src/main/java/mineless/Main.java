@@ -43,8 +43,7 @@ public class Main extends PluginBase implements Listener {
 		this.getServer().getPluginManager().registerEvents(this, this);
 		db = new DataBase(this);
 		this.getLogger().info(db.message("플러그인이 정상적으로 실행되었습니다"));
-		this.register(new addMineCommand(this));
-
+		this.registers();
 	}
 
 	@Override
@@ -85,16 +84,16 @@ public class Main extends PluginBase implements Listener {
 
 	public static boolean isMinner(CommandSender player) {
 		if (player.isPlayer()) {
-			Main.Minner.contains((Player) player);
-			return true;
+			if (Main.Minner.contains((Player) player))
+				return true;
 		}
 		return false;
 	}
 
 	public static boolean isDeller(CommandSender player) {
 		if (player.isPlayer()) {
-			Main.Deller.contains((Player) player);
-			return true;
+			if (Main.Deller.contains((Player) player))
+				return true;
 		}
 		return false;
 	}
@@ -127,20 +126,7 @@ public class Main extends PluginBase implements Listener {
 		return;
 	}
 
-	public void registerCommand(String name, String using, String descption, String permission,
-			Map<String, CommandParameter[]> parameter) {
-		SimpleCommandMap map = this.getServer().getCommandMap();
-		PluginCommand<Main> command = new PluginCommand<Main>(name, this);
-		command.setDescription(descption);
-		command.setUsage(using);
-		command.setCommandParameters(parameter);
-		command.setPermission(permission);
-		command.register(map);
-	}
-
-	public void register(Command command) {
-		SimpleCommandMap map = this.getServer().getCommandMap();
-
-		map.register("광산", command);
+	public void registers() {
+		this.getServer().getCommandMap().register("광산", new addMineCommand(this));
 	}
 }
